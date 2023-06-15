@@ -1,8 +1,5 @@
 grammar gramatica;
 
-fragment
-ESC_SEQ	: '\\\'';
-
 // Numeros inteiros e reais
 NUM_INT 
     :   ('0'..'9')+ ;
@@ -16,6 +13,18 @@ IDENT
     :   [a-zA-Z][a-zA-Z0-9_]*
     ;
 
+CADEIA
+    :   '"' (~["\\\r\n] | ESC_SEQ)* '"'
+	;
+
+fragment
+ESC_SEQ	: '\\\'';
+
+// Ignorando comentario, mas acusando erro de comentario nao fechado
+COMENTARIO
+    :   '{' ~[\r\n{}]* '}' [\r]? [\n]? -> skip
+    ;
+
 // Ignorando White Space
 WS  
     :   ( ' '
@@ -24,27 +33,6 @@ WS
         | '\n'
         ) -> skip
     ;
-
-// Ignorando comentario, mas acusando erro de comentario nao fechado
-COMENTARIO
-    :   '{' ~[\r\n{}]* '}' [\r]? [\n]? -> skip
-    ;
-
-COMENTARIO_NAO_FECHADO
-    :   '{' (~('\n'|'\r'|'{'|'}'))* '\r'? '\n'?
-    ;
-
-CADEIA
-    :   '"' (~["\\\r\n] | ESC_SEQ)* '"'
-	;
-
-// Acusando erro de cadeia literal nao fechada
-CADEIA_LITERAL_NAO_FECHADA
-    :   '"' ( ESC_SEQ | ~('"'|'\\') )* '\r'? '\n'?
-    ;
-
-// Simbolos nao reconhecidos
-NAO_RECONHECIDO : ~('a');
 
 
 programa: declaracoes 'algoritmo' corpo 'fim_algoritmo';
