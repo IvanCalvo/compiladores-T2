@@ -1,3 +1,13 @@
+ /*
+    Autores:
+    Ivan Duarte Calvo RA: 790739
+    João Ricardo Lopes Lovato RA: 772138
+    Vinícius Borges de Lima RA: 795316
+
+    -> para gerar os arquivos é utilizado o seguinte comando:
+        antlr4 -Dlanguage=Python3 gramatica.g4
+*/
+
 grammar gramatica;
 
 // Numeros inteiros e reais
