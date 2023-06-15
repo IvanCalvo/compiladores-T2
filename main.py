@@ -21,11 +21,9 @@ class GramaticaLexerErrorListener(ErrorListener):
             raise Exception(f'Linha {line}: comentario nao fechado')       
         else:
             raise Exception(f'Linha {line}: {erro} - simbolo nao identificado')
-        
 
 class GramaticaParserErrorListener(ErrorListener):
      def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        error = str(e.input)[e.startIndex]
         errorText = offendingSymbol.text
 
         if errorText == '<EOF>':
@@ -46,20 +44,19 @@ output_file_name = sys.argv[2]
 # Criando um InputStream atraves do arquivo de entrada
 input_stream = FileStream(input_file_name, encoding='utf-8')
 
-
 #Criando um arquivo de saida
 output_file = open(output_file_name,"w")
 
 # Utilizando o lexer criado com o ANTLR
 lexer = gramaticaLexer(input_stream)
 
-parser = gramaticaParser(input_stream)
-
 stream = CommonTokenStream(lexer)
 
+parser = gramaticaParser(stream)
+
 lexer.removeErrorListeners()
-lexer.addErrorListener(GramaticaLexerErrorListener())
 parser.removeErrorListeners()
+lexer.addErrorListener(GramaticaLexerErrorListener())
 parser.addErrorListener(GramaticaParserErrorListener())
 
 
@@ -72,5 +69,6 @@ except Exception as error:
     listaErros.append(str(error))
     listaErros.append("Fim da compilacao")
     for item_erro in listaErros:
-        output_file.write(item_erro+'\n')
+        output_file.write(f"{item_erro}\n")
 
+output_file.close()

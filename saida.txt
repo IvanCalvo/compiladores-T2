@@ -1,2 +1,2 @@
-'int' object has no attribute 'type'
+Linha 10: erro sintatico proximo a leia
 Fim da compilacao
